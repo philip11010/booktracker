@@ -3,7 +3,12 @@
         <!--Nav Bar-->
         <v-app-bar>
             <v-spacer></v-spacer>
-            <v-btn @click="$inertia.visit('/login')">Login</v-btn>
+            <v-btn v-if="canLogin" @click="$inertia.visit(route('login'))">
+                Login
+            </v-btn>
+            <v-btn v-if="canRegister" @click="$inertia.visit(route('register'))">
+                Register
+            </v-btn>
         </v-app-bar>
 
         <!--Main Page-->>
@@ -15,5 +20,10 @@
     </v-app>
 </template>
 
-<script setup></script>
+<script setup>
+    defineProps({
+        canLogin: Boolean,
+        canRegister: Boolean,
+    })
+</script>
 
