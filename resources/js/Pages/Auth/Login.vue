@@ -1,10 +1,4 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -30,71 +24,115 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <v-app>
         <Head title="Log in" />
+        
+        <v-main>
+            <v-container fluid class="fill-height">
+                <v-row align="center" justify="center">
+                    <v-col cols="12" sm="8" md="4">
+                        
+                        <!-- Success Message -->
+                        <v-alert
+                            v-if="status"
+                            type="success"
+                            class="mb-4"
+                        >
+                            {{ status }}
+                        </v-alert>
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
+                        <!-- Login Card -->
+                        <v-card elevation="4">
+                            <v-card-title class="text-h5 pa-5 bg-primary text-white">
+                                Log in to BookTracker
+                            </v-card-title>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+                            <v-card-text class="pa-6">
+                                <v-form @submit.prevent="submit">
+                                    
+                                    <!-- Email Field -->
+                                    <v-text-field
+                                        v-model="form.email"
+                                        label="Email"
+                                        type="email"
+                                        :error-messages="form.errors.email"
+                                        variant="outlined"
+                                        required
+                                        autofocus
+                                        autocomplete="username"
+                                        prepend-inner-icon="mdi-email"
+                                        class="mb-3"
+                                    />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                                    <!-- Password Field -->
+                                    <v-text-field
+                                        v-model="form.password"
+                                        label="Password"
+                                        type="password"
+                                        :error-messages="form.errors.password"
+                                        variant="outlined"
+                                        required
+                                        autocomplete="current-password"
+                                        prepend-inner-icon="mdi-lock"
+                                        class="mb-3"
+                                    />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+                                    <!-- Remember Me Checkbox -->
+                                    <v-checkbox
+                                        v-model="form.remember"
+                                        label="Remember me"
+                                        color="primary"
+                                        class="mb-3"
+                                    />
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                                    <!-- Forgot Password Link and Login Button -->
+                                    <div class="d-flex justify-space-between align-center flex-wrap ga-3">
+                                        <Link
+                                            v-if="canResetPassword"
+                                            :href="route('password.request')"
+                                            class="text-decoration-none text-primary"
+                                        >
+                                            Forgot your password?
+                                        </Link>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
+                                        <!-- Login Button -->
+                                        <v-btn
+                                            type="submit"
+                                            color="primary"
+                                            size="large"
+                                            :loading="form.processing"
+                                            :disabled="form.processing"
+                                            min-width="120"
+                                        >
+                                            Log in
+                                        </v-btn>
+                                    </div>
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+                                    <!-- Register Link -->
+                                    <v-divider class="my-5" />
+                                    
+                                    <div class="text-center">
+                                        <span class="text-body-2">Don't have an account? </span>
+                                        <Link
+                                            :href="route('register')"
+                                            class="text-decoration-none text-primary font-weight-medium"
+                                        >
+                                            Register here
+                                        </Link>
+                                    </div>
+                                </v-form>
+                            </v-card-text>
+                        </v-card>
 
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
+
+<style scoped>
+.fill-height {
+    min-height: 100vh;
+}
+</style>
