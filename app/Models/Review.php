@@ -16,7 +16,6 @@ class Review extends Model
         'thoughts',
     ];
 
-    // Relationships
     public function book()
     {
         return $this->belongsTo(Book::class);

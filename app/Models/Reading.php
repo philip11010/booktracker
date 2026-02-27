@@ -23,7 +23,6 @@ class Reading extends Model
         'finished_at' => 'date',
     ];
 
-    // Relationships
     public function book()
     {
         return $this->belongsTo(Book::class);

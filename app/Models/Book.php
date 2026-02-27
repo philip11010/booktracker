@@ -18,7 +18,6 @@ class Book extends Model
         'publication_year',
     ];
 
-    // Relationships
     public function reading()
     {
         return $this->hasOne(Reading::class);
